@@ -31,3 +31,5 @@ require("lazy").setup({
 	-- Automatically check for plugin updates
 	checker = { enabled = true },
 })
+
+vim.cmd.colorscheme("gruvbox-material")

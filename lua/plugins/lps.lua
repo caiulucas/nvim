@@ -20,10 +20,11 @@ return {
           "lua_ls",
           "marksman",
           "pyright",
-          "ts_ls",
+          "vtsls",
           "vimls",
           "vue_ls",
-          "zls"
+          "zls",
+          "gopls"
         },
       })
     end,
@@ -39,7 +40,6 @@ return {
       local servers = {
         "biome",
         "lua_ls",
-        "copilot",
         "marksman",
         "vimls",
         "rust_analyzer",
@@ -47,36 +47,36 @@ return {
         "pyright",
         "zls",
         "vue_ls",
+        "gopls",
       }
+
+      local vue_language_server_path = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
+      local vue_plugin = {
+        name = "@vue/typescript-plugin",
+        location = vue_language_server_path,
+        languages = { "vue" },
+        configNamespace = "typescript",
+      }
+
+      vim.lsp.config("vtsls", {
+        on_attach = on_attach,
+        filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
+        settings = {
+          vtsls = {
+            tsserver = {
+              globalPlugins = { vue_plugin },
+            },
+          }
+        }
+      })
+      vim.lsp.enable({ "vtsls" })
 
       -- Set up each server with the default on_attach
       for _, server in ipairs(servers) do
         vim.lsp.config(server, { on_attach = on_attach })
         vim.lsp.enable({ server })
       end
-
-      vim.lsp.config("ts_ls", {
-        on_attach = function(_, bufnr)
-          on_attach(_, bufnr)
-
-          vim.api.nvim_buf_set_keymap(
-            bufnr,
-            "n",
-            "<leader>co",
-            "<cmd>lua vim.lsp.buf.execute_command({ command = '_typescript.organizeImports', arguments = { vim.fn.expand('%:p') }})<cr>",
-            { noremap = true, silent = true, desc = "Organize imports" }
-          )
-        end,
-        init_options = {
-          plugins = {
-            {
-              name = "@vue/typescript-plugin",
-              location = "/usr/lib/node_modules/@vue/typescript-plugin",
-              languages = { "javascript", "typescript", "vue" },
-            },
-          },
-        },
-      })
     end,
   },
   {

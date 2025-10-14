@@ -63,6 +63,16 @@ return {
         on_attach = on_attach,
         filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
         settings = {
+          typescript = {
+            inlayHints = {
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = true },
+              variableTypes = { enabled = true },
+              propertyDeclarationTypes = { enabled = true },
+              functionLikeReturnTypes = { enabled = true },
+              enumMemberValues = { enabled = true },
+            }
+          },
           vtsls = {
             tsserver = {
               globalPlugins = { vue_plugin },
@@ -71,6 +81,18 @@ return {
         }
       })
       vim.lsp.enable({ "vtsls" })
+
+      vim.lsp.config("gopls", {
+        settings = {
+          gopls = {
+            ["ui.inlayhint.hints"] = {
+              compositeLiteralFields = true,
+              constantValues = true,
+              parameterNames = true
+            },
+          },
+        },
+      })
 
       -- Set up each server with the default on_attach
       for _, server in ipairs(servers) do

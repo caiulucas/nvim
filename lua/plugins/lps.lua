@@ -38,7 +38,6 @@ return {
 
       -- List of servers with default settings
       local servers = {
-        "biome",
         "lua_ls",
         "marksman",
         "vimls",
@@ -46,12 +45,12 @@ return {
         "hls",
         "pyright",
         "zls",
-        "vue_ls",
+        -- "vue_ls",
         "gopls",
       }
 
       local vue_language_server_path = vim.fn.stdpath("data") ..
-      "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+          "/mason/packages/vue-language-server/node_modules/@vue/language-server"
 
       local vue_plugin = {
         name = "@vue/typescript-plugin",
@@ -61,10 +60,13 @@ return {
       }
 
       vim.lsp.config("vtsls", {
-        on_attach = on_attach,
+        -- on_attach = on_attach,
         filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
         settings = {
           typescript = {
+            format = {
+              enable = false
+            },
             inlayHints = {
               parameterNames = { enabled = "literals" },
               parameterTypes = { enabled = true },
@@ -115,17 +117,17 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        lua = { "stylua" },
-        javascript = { "eslint_d", stop_after_first = true },
-        typescript = { "eslint_d", stop_after_first = true },
-        javascriptreact = { "eslint_d", stop_after_first = true },
-        typescriptreact = { "eslint_d", stop_after_first = true },
-        vue = { "eslint_d", stop_after_first = true },
+        -- lua = { "stylua" },
+        -- javascript = { "eslint_d", stop_after_first = true },
+        -- typescript = { "eslint_d", stop_after_first = true },
+        -- javascriptreact = { "eslint_d", stop_after_first = true },
+        -- typescriptreact = { "eslint_d", stop_after_first = true },
+        -- vue = { "eslint_d", stop_after_first = true },
         rust = { "rustfmt" },
       },
-      format_on_save = {
-        lsp_format = "fallback",
-      },
+      -- format_on_save = {
+      --   lsp_format = "fallback",
+      -- },
     },
   },
 }

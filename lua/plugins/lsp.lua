@@ -33,7 +33,9 @@ return {
     "neovim/nvim-lspconfig",
     config = function()
       local on_attach = function(_, bufnr)
-        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+        if vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(true, { 0 })
+        end
       end
 
       -- List of servers with default settings
@@ -41,13 +43,33 @@ return {
         "lua_ls",
         "marksman",
         "vimls",
-        "rust_analyzer",
         "hls",
         "pyright",
         "zls",
         -- "vue_ls",
         "gopls",
       }
+
+      vim.lsp.config("rust_analyzer", {
+        on_attach = on_attach,
+        settings = {
+          ["rust-analyzer"] = {
+            inlayHints = {
+              bindingModeHints = { enable = false },
+              chainingHints = { enable = true },
+              closingBraceHints = { enable = true, minLines = 25 },
+              closureReturnTypeHints = { enable = "never" },
+              lifetimeElisionHints = { enable = "never", useParameterNames = false },
+              maxLength = 25,
+              parameterHints = { enable = true },
+              reborrowHints = { enable = "never" },
+              renderColons = true,
+              typeHints = { enable = true, hideClosureInitialization = false, hideNamedConstructor = false },
+            },
+          }
+        }
+      })
+      vim.lsp.enable({ "rust_analyzer" })
 
       local vue_language_server_path = vim.fn.stdpath("data") ..
           "/mason/packages/vue-language-server/node_modules/@vue/language-server"
@@ -60,7 +82,7 @@ return {
       }
 
       vim.lsp.config("vtsls", {
-        -- on_attach = on_attach,
+        on_attach = on_attach,
         filetypes = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
         settings = {
           typescript = {
